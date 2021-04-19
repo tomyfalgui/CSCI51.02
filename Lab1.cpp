@@ -50,7 +50,7 @@ void shiftName(char *nameChar)
 int main(void)
 {
     string name;
-    cout << "What's your name? ";
+    cout << "1. ";
     // for 0-length inputs
     // getline discards delimitation characters
     // such as '\n', '\0', etc.
@@ -59,15 +59,15 @@ int main(void)
     if (name.size() > 0)
     {
         // print name
-        cout << "1. " << name << endl;
+        cout << "2. " << name << endl;
         // print name with #
-        cout << "2. " << obfuscateName(name) << endl;
+        cout << "3. " << obfuscateName(name) << endl;
         //  shift name
         for (int i = 0; i < name.size(); i++)
         {
             shiftName(&name[i]);
         }
-        cout << "3. " << name << endl;
+        cout << "4. " << name << endl;
     }
     return 0; // non-zero means an error
 }
