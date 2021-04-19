@@ -14,14 +14,13 @@ int main(void)
 
     for (int i = 0; i < numLines; i++)
     {
-        // int pos1;
-        // int pos2;
-        // scanf("%d %d %s", &pos1, &pos2, s);
-        char s[80]; // limit of 80 characters
-        fgets(s, 80, stdin);
-        printf("You typed: %s", s);
-        // printf("Agent #%d is at (%d, %d)\n", i + 1, pos1, pos2);
-        // sprintf("Says: %d %d", s[0], s[2]);
+        int pos1;
+        int pos2;
+        string restOfLine;
+        scanf("%d %d", &pos1, &pos2);
+        getline(cin, restOfLine);
+        printf("Agent #%d is at (%d, %d)\n", i + 1, pos1, pos2);
+        cout << "Says:" << restOfLine << endl;
     }
 
     return 0;
