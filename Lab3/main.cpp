@@ -38,8 +38,12 @@ int main(void)
     }
 
     delete stack;
+    stack = NULL;
     delete head;
+    head = NULL;
     delete second;
+    second = NULL;
     delete third;
+    third = NULL;
     return 0;
 }
