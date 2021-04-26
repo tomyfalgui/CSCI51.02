@@ -32,4 +32,15 @@ public:
             return value;
         }
     }
+
+    ~IntStack()
+    {
+        while (top != NULL)
+        {
+            IntNode *temp = top;
+            top = (*top).getNext();
+            delete temp;
+            temp = NULL;
+        }
+    }
 };

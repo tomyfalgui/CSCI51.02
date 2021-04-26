@@ -37,5 +37,9 @@ int main(void)
         cout << (*stack).pop() << " ";
     }
 
+    delete stack;
+    delete head;
+    delete second;
+    delete third;
     return 0;
 }
