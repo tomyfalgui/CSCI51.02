@@ -1,4 +1,6 @@
 #include <cstddef>
+#include <cstdio>
+#include <iostream>
 #include "IntNode.hpp"
 
 struct IntStack
@@ -21,7 +23,9 @@ public:
     {
         if (top == NULL)
         {
+            printf("No More top");
             // do nothing
+            exit(1);
         }
         else
         {
