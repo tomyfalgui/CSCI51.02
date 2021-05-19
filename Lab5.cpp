@@ -1,23 +1,28 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+#include <string>
 
 using namespace std;
 
-void sum(int x[], int y[], int z[], int setNum)
+string sum(int x[], int y[], int z[], int setNum)
 {
+
+    string returnValue = "";
 
     for (int i = 0; i < setNum; i++)
     {
         for (int j = i + 1; j < setNum; j++)
         {
 
-            cout << (abs(x[i] - x[j]) +
-                     abs(y[i] - y[j]) + abs(z[i] - z[j]))
-                 << endl;
+            returnValue += to_string(abs(x[i] - x[j]) +
+                                     abs(y[i] - y[j]) + abs(z[i] - z[j])) +
+                           "\n";
             i++;
         }
     }
+
+    return returnValue;
 }
 
 int main(void)
@@ -25,6 +30,7 @@ int main(void)
 
     int testCases;
     scanf("%d", &testCases);
+    string answer;
 
     for (int testCaseCount = 0; testCaseCount < testCases; testCaseCount++)
     {
@@ -46,8 +52,10 @@ int main(void)
             zCoords[pointSetCount] = z;
         }
 
-        sum(xCoords, yCoords, zCoords, numOfPoints);
+        answer += sum(xCoords, yCoords, zCoords, numOfPoints);
     }
+
+    cout << answer;
 
     return 0;
 }
