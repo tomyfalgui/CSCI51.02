@@ -20,9 +20,10 @@ int main(int argc, char *argv[])
 
     int shmIdA;
 
-    key_t shmKeyA = 1234;
-
-    int shmSizeA = 1 << 10;
+    key_t shmKeyA = 7676;
+    // 1024
+    // 2048
+    int shmSizeA = 1000 << 10;
     int shmFlagsA = IPC_CREAT | 0666;
 
     char *sharedMemA;
@@ -63,6 +64,7 @@ int main(int argc, char *argv[])
 
         // reading
         char *source = NULL;
+        long bufsize;
         FILE *fp = fopen(argv[1], "r");
         if (fp != NULL)
         {
@@ -70,7 +72,7 @@ int main(int argc, char *argv[])
             if (fseek(fp, 0L, SEEK_END) == 0)
             {
                 /* Get the size of the file. */
-                long bufsize = ftell(fp);
+                bufsize = ftell(fp);
                 if (bufsize == -1)
                 { /* Error */
                 }
@@ -104,15 +106,23 @@ int main(int argc, char *argv[])
         }
         else
         {
-            for (int i = sizeof(source); i > 0; i -= atoi(argv[2]))
+            int chunk = atoi(argv[2]);
+
+            long remain = bufsize + 1;
+
+            int pointer = 0;
+            while (remain > 0)
             {
-                printf("reading\n");
-                sleep(1);
-                memcpy(sharedMemA, source, atoi(argv[2]));
+
+                long chunkSize = remain > chunk ? chunk : remain;
+                char chunkBuff[chunkSize];
+                memcpy(chunkBuff, &source[(pointer * chunkSize)], chunkSize);
+                memcpy(&sharedMemA[(pointer * chunkSize)], chunkBuff, chunkSize);
+                remain -= chunkSize;
+                pointer++;
             }
         }
 
-        sleep(1);
         free(source);
 
         int a;

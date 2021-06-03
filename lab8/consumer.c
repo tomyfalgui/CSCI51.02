@@ -20,9 +20,9 @@ int main(int argc, char *argv[])
 
     int shmIdA;
 
-    key_t shmKeyA = 1234;
+    key_t shmKeyA = 7676;
 
-    int shmSizeA = 1 << 10;
+    int shmSizeA = 1000 << 10;
     int shmFlagsA = IPC_CREAT | 0666;
 
     char *sharedMemA;
@@ -60,54 +60,67 @@ int main(int argc, char *argv[])
         printf("Running Consumer!\n");
 
         // -- Do stuff --
-
         if (((int *)sharedMemA) == (int *)-1)
         {
             perror("shmop: shmat failed");
         }
         else
         {
-            // writing
+            printf("%s", sharedMemA);
+
             FILE *fptr;
-            int i = 0;
-            while (i < 5)
+            fptr = fopen(argv[1], "w");
+
+            if (fptr == NULL)
             {
-                fptr = fopen(argv[1], "w");
+                printf("Error!");
+                exit(1);
+            }
 
-                if (fptr == NULL)
-                {
-                    printf("Error!");
-                    exit(1);
-                }
+            int length = strlen(sharedMemA);
+            int chunk = atoi(argv[2]);
+            long remain = length;
+            int pointer = 0;
 
-                char buffer2[atoi(argv[2])];
+            while (remain > 0)
+            {
 
-                strcpy(buffer2, sharedMemA);
-                fprintf(fptr, "%s", buffer2);
-                i++;
+                long chunkSize = remain > chunk ? chunk : remain;
+                char chunkBuff[chunkSize];
+                memcpy(chunkBuff, &sharedMemA[(pointer * chunkSize)], chunkSize);
+
+                int i = 0;
+
+                fprintf(fptr, "%s", chunkBuff);
+                i += 1;
+                remain -= chunkSize;
+                pointer++;
+                // sleep(1);
             }
             fclose(fptr);
-        }
+            shmctl(shmIdA, IPC_RMID, NULL);
 
-        // end writing
+            // end writing
 
-        // Set number of operations to 1
-        nOperations = 1;
+            // Set number of operations to 1
+            nOperations = 1;
 
-        // Modify the first operation such that it
-        // now decrements the semaphore.
-        sema[0].sem_num = 0;
-        sema[0].sem_op = -1; // Decrement semaphore by 1
-        sema[0].sem_flg = SEM_UNDO | IPC_NOWAIT;
+            // Modify the first operation such that it
+            // now decrements the semaphore.
+            sema[0].sem_num = 0;
+            sema[0].sem_op = -1; // Decrement semaphore by 1
+            sema[0].sem_flg = SEM_UNDO | IPC_NOWAIT;
 
-        opResult = semop(semId, sema, nOperations);
-        if (opResult == -1)
-        {
-            perror("semop (decrement)");
-        }
-        else
-        {
-            printf("Successfully Released!\n");
+            opResult = semop(semId, sema, nOperations);
+            if (opResult == -1)
+            {
+                perror("semop (decrement)");
+            }
+            else
+            {
+
+                printf("Successfully Released!\n");
+            }
         }
     }
     else
