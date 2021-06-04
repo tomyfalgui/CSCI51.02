@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <unistd.h>
 int main(int argc, char *argv[])
 {
     if (argc != 3)
@@ -66,7 +66,6 @@ int main(int argc, char *argv[])
         }
         else
         {
-            printf("%s", sharedMemA);
 
             FILE *fptr;
             fptr = fopen(argv[1], "w");
@@ -77,25 +76,21 @@ int main(int argc, char *argv[])
                 exit(1);
             }
 
-            int length = strlen(sharedMemA);
+            size_t length = strlen(sharedMemA);
             int chunk = atoi(argv[2]);
-            long remain = length - 1;
-            int pointer = 0;
+            size_t remain = length + 1;
+            size_t pointer = 0;
 
             while (remain > 0)
             {
 
-                long chunkSize = remain > chunk ? chunk : remain;
+                size_t chunkSize = remain > chunk ? chunk : remain;
                 char chunkBuff[chunkSize];
-                memcpy(chunkBuff, &sharedMemA[(pointer * chunkSize)], chunkSize);
-                // [1,2,3,4,5]
-                int i = 0;
-
+                memcpy(chunkBuff, &sharedMemA[(pointer * chunk)], chunkSize);
                 fprintf(fptr, "%s", chunkBuff);
-                i += 1;
                 remain -= chunkSize;
                 pointer++;
-                // sleep(1);
+                sleep(1);
             }
             fclose(fptr);
             shmctl(shmIdA, IPC_RMID, NULL);

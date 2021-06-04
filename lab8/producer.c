@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[])
 {
@@ -116,10 +117,11 @@ int main(int argc, char *argv[])
 
                 long chunkSize = remain > chunk ? chunk : remain;
                 char chunkBuff[chunkSize];
-                memcpy(chunkBuff, &source[(pointer * chunkSize)], chunkSize);
-                memcpy(&sharedMemA[(pointer * chunkSize)], chunkBuff, chunkSize);
+                memcpy(chunkBuff, &source[(pointer * chunk)], chunkSize);
+                memcpy(&sharedMemA[(pointer * chunk)], chunkBuff, chunkSize);
                 remain -= chunkSize;
                 pointer++;
+                sleep(1);
             }
         }
 
