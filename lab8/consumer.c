@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
                 fprintf(fptr, "%s", chunkBuff);
                 remain -= chunkSize;
                 pointer++;
-                sleep(1);
+                usleep(30 * 1000);
             }
             fclose(fptr);
             shmctl(shmIdA, IPC_RMID, NULL);

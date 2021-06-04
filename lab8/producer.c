@@ -121,7 +121,8 @@ int main(int argc, char *argv[])
                 memcpy(&sharedMemA[(pointer * chunk)], chunkBuff, chunkSize);
                 remain -= chunkSize;
                 pointer++;
-                sleep(1);
+                printf("writing\n");
+                usleep(30 * 1000);
             }
         }
 
