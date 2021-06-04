@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
             int length = strlen(sharedMemA);
             int chunk = atoi(argv[2]);
-            long remain = length;
+            long remain = length - 1;
             int pointer = 0;
 
             while (remain > 0)
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
                 long chunkSize = remain > chunk ? chunk : remain;
                 char chunkBuff[chunkSize];
                 memcpy(chunkBuff, &sharedMemA[(pointer * chunkSize)], chunkSize);
-
+                // [1,2,3,4,5]
                 int i = 0;
 
                 fprintf(fptr, "%s", chunkBuff);
